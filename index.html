@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Inventory</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Car Inventory</h2>
+
+    <table id="carTable">
+      <tr>
+        <th>Car Name</th>
+        <th>Price</th>
+        <th>Discount</th>
+        <th>Availability</th>
+        <th>Color</th>
+      </tr>
+    </table>
+
+    <form id="sortFormByPrice">
+      <label for="sortByPrice">Sort by Price:</label>
+      <select id="sortByPrice" name="sort">
+        <option value="asc">Low to High</option>
+        <option value="desc">High to Low</option>
+      </select>
+    </form>
+
+    <form id="sortFormByColor">
+      <label for="sortByColor">Sort by Color:</label>
+      <select id="sortByColor" name="sort">
+        <option value="asc">A to Z</option>
+        <option value="desc">Z to A</option>
+      </select>
+    </form>
+
+    <script>
+      const cars = [
+        {
+          car_name: "Tesla Model S",
+          price: 79999,
+          discount: 5000,
+          hand: 4,
+          availability: "In Stock",
+          color: "Red",
+        },
+        {
+          car_name: "Toyota Prius",
+          price: 24999,
+          discount: 2000,
+          hand: 2,
+          availability: "Out of Stock",
+          color: "Blue",
+        },
+        {
+          car_name: "Ford Mustang",
+          price: 55999,
+          hand: 3,
+          discount: 3000,
+          availability: "In Stock",
+          color: "Black",
+        },
+        {
+          car_name: "Audi A4",
+          price: 39999,
+          discount: 4500,
+          hand: 1,
+          availability: "In Stock",
+          color: "White",
+        },
+        {
+          car_name: "BMW 3 Series",
+          price: 41999,
+          hand: 1,
+          discount: 4000,
+          availability: "Out of Stock",
+          color: "Silver",
+        },
+      ];
+
+      function renderTable(cars) {
+        const table = document.getElementById("carTable");
+        const tbody =
+          table.querySelector("tbody") || document.createElement("tbody");
+        tbody.innerHTML = "";
+
+        cars.forEach((car) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                <td>${car.car_name}</td>
+                <td>${car.price}</td>
+                <td>${car.discount || "-"}</td>
+                <td>${car.availability}</td>
+                <td>${car.color}</td>
+            `;
+          tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+      }
+
+      renderTable(cars);
+
+      document
+        .getElementById("sortFormByPrice")
+        .addEventListener("change", function (event) {
+          event.preventDefault();
+          const sortOrder = document.getElementById("sortByPrice").value;
+
+          const sortedCars = [...cars]; // Make a copy of the original array
+
+          sortedCars.sort((a, b) => {
+            if (sortOrder === "asc") {
+              return a.price - b.price;
+            } else {
+              return b.price - a.price;
+            }
+          });
+
+          renderTable(sortedCars);
+        });
+
+      document
+        .getElementById("sortFormByColor")
+        .addEventListener("change", function (event) {
+          event.preventDefault();
+          const sortOrder = document.getElementById("sortByColor").value;
+
+          const sortedCars = [...cars]; // Make a copy of the original array
+
+          sortedCars.sort((a, b) => {
+            if (sortOrder === "asc") {
+              return a.color.localeCompare(b.color);
+            } else {
+              return b.color.localeCompare(a.color);
+            }
+          });
+
+          renderTable(sortedCars);
+        });
+    </script>
+  </body>
+</html>
