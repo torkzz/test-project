@@ -122,17 +122,18 @@
           event.preventDefault();
           const sortOrder = document.getElementById("sortByPrice").value;
 
-          const sortedCars = [...cars]; // Make a copy of the original array
-
-          sortedCars.sort((a, b) => {
-            if (sortOrder === "asc") {
-              return a.price - b.price;
-            } else {
-              return b.price - a.price;
-            }
-          });
-
-          renderTable(sortedCars);
+          fetch(`http://localhost/sort.php?sort=${sortOrder}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cars),
+          })
+            .then((response) => response.json())
+            .then((sortedCars) => renderTable(sortedCars))
+            .catch((error) =>
+              console.error("Error sorting cars by price:", error)
+            );
         });
 
       document
